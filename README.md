@@ -48,7 +48,7 @@ let speaker = celebrimbor.synthesis();
 
 celebrimbor.addCommands({
     'скажи *say': (say) => {
-         speaker.synthesis().say(say);
+        speaker.synthesis().say(say);
     }
 });
 ````
@@ -92,6 +92,17 @@ celebrimbor.addEvent(celebrimbor.getEvents().AFTER_SET_STYLESHEET, (event) => {
    speaker.say('Событие на завершение темизации графического интерфейса');
 });
 
+// или через глобальные свойства (poperties) объекта Celebrimbor
+
+celebrimbor.addCommands({
+    'пауза': () => {
+       celebrimbor.pause();
+    }
+});
+
+celebrimbor.addEvent(celebrimbor.getProps().speech.events.BEFORE_PAUSE, (event) => {
+    speaker.say('Вы поcтавили паузу!');
+});
 ````
 
 ### Управление скоростью и громкостью
@@ -112,4 +123,14 @@ rate.onchange = () => {
     speaker.setSpeed(rate.value);
     rateValue.textContent = rate.value;
 }
+````
+
+### Дополнительные примеры API: 
+API еще не полное
+````javascript
+// помощник, выводит команды на UI интерфейс
+celebrimbor.setSampleCommands(['heeey', 'privet']);
+
+// думаю понятно
+celebrimbor.setLanguage('ru-RU');
 ````
