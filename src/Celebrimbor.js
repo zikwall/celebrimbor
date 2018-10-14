@@ -94,67 +94,13 @@ export class Celebrimbor {
                     isListening: false,
                     events: {}
                 },
-                ui: {
-                    isInit: false,
-                    startCommand: false,
-                    abortCommand: false,
-                    listeningStoppedTimeout: false,
-                    minutesToRememberStatus: 0,
-                    guiNodes: false,
-                    stylesheet: false,
-                    stylesheetNode: false,
-                    uiElements: {
-                        divRoot: {
-                            id: 'celebrimbor-ui',
-                            cssClasses: {
-                                listen: 'celebrimbor-ui--listening',
-                                notListen: 'celebrimbor-ui--not-listening',
-                                sampleCommands: 'celebrimbor-ui--sample-commands-shown',
-                                sencence: 'celebrimbor-ui--recognized-sentence-shown'
-                            }
-                        },
-                        button: 'celebrimbor-ui-toggle-button',
-                        label: 'celebrimbor-ui-toggle-button__label',
-                        listen: {
-                            divBox: 'celebrimbor-ui-listening-box',
-                            divText: 'celebrimbor-ui-listening-text',
-                            spanInstructions: 'celebrimbor-ui-listening-text__instructions',
-                            spanSamples: 'celebrimbor-ui-listening-text__samples',
-                            spanSentence: 'celebrimbor-ui-listening-text__recognized-sentence'
-                        }
-                    },
-                    events: {}
-                },
-                synthesis: {
-                    voices: {},
-                    voice: {
-                        default: false,
-                        lang: "ru-RU",
-                        localService: false,
-                        name: "Google UK English Male",
-                        voiceURI: "Google UK English Male"
-                    },
-                    helpers: {
-                        redirectRecognizedTextOutput: null,
-                        remoteProcessorHandler: null,
-                        lastSay: null,
-                        fatalityPromiseCallback: null
-                    },
-                    events: {},
-                    isSpeaking: false,
-                    garbageCollection: [],
-                    speed: 1,
-                    volume: 1,
-                    obeying: true,
-                    soundex: false,
-                    //continuous: true,
-                    name: 'Celebrimbor',
-                }
+                ui: null,
+                synthesis: null,
             },
             speechRecognition: false,
             speechRecognitionObject: false,
-            speechSynthesis: false,
-            celebrimborUI: false,
+            speechSynthesis: null,
+            celebrimborUI: null,
             commands: [],
             sampleCommands: [],
             recognizedSentences: [],

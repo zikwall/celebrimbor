@@ -3,6 +3,7 @@
  */
 import { Celebrimbor } from './Celebrimbor.js';
 import CelebrimborSynthesis from "./CelebrimborSynthesis.js";
+import CelebrimborUI from "./CelebrimborUI.js";
 
 export class CelebrimborRecognition extends Celebrimbor
 {
@@ -51,7 +52,7 @@ export class CelebrimborRecognition extends Celebrimbor
      * @param {boolean} isReset
      */
     initCelebrimborRecognition(commands, isReset = false) {
-
+        this.triggerEvent(this.getProps().speech.events.BEFORE_INIT);
         // Прервать уже запущенные экземпляры распознавания речи
         if (this.celebrimborSpeech && this.celebrimborSpeech.abort) {
             this.celebrimborSpeech.abort();
@@ -170,6 +171,7 @@ export class CelebrimborRecognition extends Celebrimbor
         if(this.isDebug()) {
             this.console('initCelebrimborRecognition success', 'info');
         }
+        this.triggerEvent(this.getProps().speech.events.AFTER_INIT);
     }
 
     /**
@@ -178,7 +180,7 @@ export class CelebrimborRecognition extends Celebrimbor
      */
     start(options) {
         this.initConditional();
-        
+        this.triggerEvent(this.getProps().speech.events.BEFORE_START);
         options = options || {};
         
         if (options.paused !== undefined) {
@@ -209,6 +211,7 @@ export class CelebrimborRecognition extends Celebrimbor
                 this.console(e.message, 'error');
             }
         }
+        this.triggerEvent(this.getProps().speech.events.AFTER_START);
     }
     
     abort() {
@@ -221,11 +224,15 @@ export class CelebrimborRecognition extends Celebrimbor
     }
     
     pause() {
+        this.triggerEvent(this.getProps().speech.events.BEFORE_PAUSE);
         this.getProps().speech.pauseListening = true;
+        this.triggerEvent(this.getProps().speech.events.AFTER_PAUSE);
     }
     
     resume() {
+        this.triggerEvent(this.getProps().speech.events.BEFORE_RESUME);
         this.start();
+        this.triggerEvent(this.getProps().speech.events.AFTER_RESUME);
     }
     
     addCommands(commands) {
@@ -336,10 +343,8 @@ export class CelebrimborRecognition extends Celebrimbor
      * @returns {CelebrimborSynthesis}
      */
     synthesis(options = {}) {
-        if(this.getCelebrimbor().speechSynthesis instanceof CelebrimborSynthesis) {
-            if(!this.getCelebrimbor().speechSynthesis.isInitEvents) {
-                this.getCelebrimbor().speechSynthesis.initEvents();
-            }
+        if(this.getCelebrimbor().speechSynthesis instanceof CelebrimborSynthesis && this.getCelebrimbor().speechSynthesis !== null) {
+            this.getCelebrimbor().speechSynthesis.initSynthesisConditional();
             return this.getCelebrimbor().speechSynthesis;
         }
 
@@ -350,5 +355,26 @@ export class CelebrimborRecognition extends Celebrimbor
         this.getCelebrimbor().speechSynthesis = new CelebrimborSynthesis(options);
 
         return this.getCelebrimbor().speechSynthesis;
+    }
+
+    /**
+     * @description not using
+     * @returns {boolean}
+     */
+    ui() {
+        this.abort();
+
+        if(this.getCelebrimbor().celebrimborUI instanceof CelebrimborUI && this.getCelebrimbor().celebrimborUI !== null) {
+            this.getCelebrimbor().celebrimborUI.initUiConditional();
+            return this.getCelebrimbor().celebrimborUI;
+        }
+
+        if(this.isDebug()) {
+            this.console('New instance CelebrimborUI in CelebrimborRecognition', 'info');
+        }
+
+        this.getCelebrimbor().celebrimborUI = new CelebrimborUI();
+
+        return this.getCelebrimbor().celebrimborUI;
     }
 }

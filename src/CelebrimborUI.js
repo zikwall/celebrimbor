@@ -8,6 +8,60 @@ export default class CelebrimborUI extends CelebrimborRecognition
     constructor() {
         super();
 
+        this.initUiProps();
+        this.initUI();
+    }
+
+    initUiConditional() {
+        if(this.getProps().ui === null) {
+            this.initUiProps();
+            this.initUI();
+        }
+    }
+
+    initUiProps() {
+        if(this.getProps().ui !== null) {
+            return;
+        }
+
+        this.getProps().ui = {
+            isInit: false,
+            startCommand: false,
+            abortCommand: false,
+            listeningStoppedTimeout: false,
+            minutesToRememberStatus: 0,
+            guiNodes: false,
+            stylesheet: false,
+            stylesheetNode: false,
+            uiElements: {
+                divRoot: {
+                    id: 'celebrimbor-ui',
+                    cssClasses: {
+                        listen: 'celebrimbor-ui--listening',
+                        notListen: 'celebrimbor-ui--not-listening',
+                        sampleCommands: 'celebrimbor-ui--sample-commands-shown',
+                        sencence: 'celebrimbor-ui--recognized-sentence-shown'
+                    }
+                },
+                button: 'celebrimbor-ui-toggle-button',
+                label: 'celebrimbor-ui-toggle-button__label',
+                listen: {
+                    divBox: 'celebrimbor-ui-listening-box',
+                    divText: 'celebrimbor-ui-listening-text',
+                    spanInstructions: 'celebrimbor-ui-listening-text__instructions',
+                    spanSamples: 'celebrimbor-ui-listening-text__samples',
+                    spanSentence: 'celebrimbor-ui-listening-text__recognized-sentence'
+                }
+            },
+            events: null
+        };
+    }
+
+    initUiEvents() {
+        if(this.getProps().ui.events !== null) {
+            return;
+        }
+
         this.getProps().ui.events = {
             // events on init Celebrimbor UI
             BEFORE_INIT: 'BEFORE_INIT',
@@ -37,14 +91,13 @@ export default class CelebrimborUI extends CelebrimborRecognition
             BEFORE_SET_STYLESHEET: 'BEFORE_SET_STYLESHEET',
             AFTER_SET_STYLESHEET: 'AFTER_SET_STYLESHEET',
         };
-
-        this.initUI();
     }
-    
-    initUI() {
-        this.getCelebrimbor().celebrimborUI = this;
-        this.getCelebrimbor().properties.ui.isInit = true;
 
+    initUI(isCreate = true) {
+        this.initUiEvents();
+
+        this.triggerEvent(this.getProps().ui.events.BEFORE_INIT);
+        //this.getCelebrimbor().celebrimborUI = this;
         /**
          * По умолчанию команды Celebrimbor
          */
@@ -55,8 +108,12 @@ export default class CelebrimborUI extends CelebrimborRecognition
         this.addCallback('end', this.onEnd);
         this.addCallback('resultMatch', this.setRecognizedSentence);
         this.addCallback('resultNoMatch', this.setRecognizedSentence);
-        
-        this.createGUI();
+
+        if(isCreate) {
+            this.getCelebrimbor().properties.ui.isInit = true;
+            this.createGUI();
+        }
+        this.triggerEvent(this.getProps().ui.events.AFTER_INIT);
     }
     
     getUI() {

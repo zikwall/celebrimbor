@@ -7,7 +7,66 @@ export default class CelebrimborSynthesis extends Celebrimbor
 {
     constructor(options = {}) {
         super();
+        this.initSynthesisProps();
         this.initSynthesis();
+    }
+
+    initSynthesisConditional() {
+        if(this.getProps().synthesis === null) {
+            this.initSynthesisProps();
+            this.initSynthesis();
+        }
+    }
+
+    /**
+     * @description для инициализации без создания нового объекта
+     */
+    initSynthesisEvents() {
+        this.getSynthesis().events = {
+            // events on Celebrimbor saying
+            BEFORE_SAY: 'BEFORE_SAY',
+            AFTER_SAY: 'AFTER_SAY',
+
+            // events on Celebrimbor finished say
+            BEFORE_SAY_FINISHED: 'BEFORE_SAY_FINISHED',
+            AFTER_SAY_FINISHED: 'AFTER_SAY_FINISHED',
+
+            // not attaching events
+            SYNTHESIS_START: "SYNTHESIS_START",
+            SYNTHESIS_END: "SYNTHESIS_END",
+        };
+    }
+
+    isInitEvents() {
+        return this.getSynthesis().events !== null;
+    }
+
+    initSynthesisProps() {
+        this.getProps().synthesis = {
+            voices: {},
+            voice: {
+                default: false,
+                lang: "ru-RU",
+                localService: false,
+                name: "Google UK English Male",
+                voiceURI: "Google UK English Male"
+            },
+            helpers: {
+                redirectRecognizedTextOutput: null,
+                remoteProcessorHandler: null,
+                lastSay: null,
+                fatalityPromiseCallback: null
+            },
+            events: {},
+            isSpeaking: false,
+            garbageCollection: [],
+            speed: 1,
+            volume: 1,
+            obeying: true,
+            soundex: false,
+            //continuous: true,
+            name: 'Celebrimbor',
+        }
     }
     
     initSynthesis() {
@@ -55,26 +114,7 @@ export default class CelebrimborSynthesis extends Celebrimbor
             "native": ["native"]
         }
 
-        this.initEvents();
-    }
-
-    /**
-     * @description для инициализации без создания нового объекта
-     */
-    initEvents() {
-        this.getSynthesis().events = {
-            // events on Celebrimbor saying
-            BEFORE_SAY: '',
-            AFTER_SAY: '',
-
-            // not attaching events
-            SYNTHESIS_START: "SYNTHESIS_START",
-            SYNTHESIS_END: "SYNTHESIS_END",
-        };
-    }
-
-    isInitEvents() {
-        return this.getSynthesis().events.length > 0;
+        this.initSynthesisEvents();
     }
 
     /**
@@ -83,10 +123,6 @@ export default class CelebrimborSynthesis extends Celebrimbor
      * @see: https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
      */
     setSpeed(speed) {
-        if (typeof speed !== 'number' || speed <= 0) {
-            return;
-        }
-
         this.getSynthesis().speed = speed;
     }
 
@@ -96,10 +132,6 @@ export default class CelebrimborSynthesis extends Celebrimbor
      * @see https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
      */
     setVolume(volume) {
-        if (typeof volume !== 'number' || volume <= 0) {
-            return;
-        }
-
         this.getSynthesis().volume = volume;
     }
 
