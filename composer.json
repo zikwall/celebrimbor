@@ -1,0 +1,17 @@
+{
+  "name": "zikwall/celebrimbor",
+  "version": "0.1.1",
+  "description": "Speech Recognition and Synthesis for your web application",
+  "keywords": ["celebrimbor", "celebrimbor.js", "recognition", "synthesis", "speech", "speechrecognition", "voice"],
+  "type": "javascript-library",
+  "support": {
+    "issues": "https://github.com/zikwall/celebrimbor/issues?state=open",
+    "source": "https://github.com/zikwall/celebrimbor"
+  },
+  "authors": [
+    {
+      "name": "Andrey Kapitonov",
+      "email": "andrey.kapitonov.96@gmall.com"
+    }
+  ]
+}
